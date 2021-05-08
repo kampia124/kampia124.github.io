@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Kamille Piacquadio" />
+    
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.ico">
+    <title>Project 1: Exploratory Data Analysis</title>
+    <meta name="generator" content="Hugo 0.83.1" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../../css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="../../"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="../../post/">BLOG</a></li>
+        
+        <li><a href="../../projects/">PROJECTS</a></li>
+        
+        <li><a href="../../resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="../../project/project1/">Project 1: Exploratory Data Analysis</a></strong>
+          </h3>
+        </div>
+ 
+<div class="blog-title">
+          <h4>
+         January 1, 0001 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+
+
+<p>##Kamille Piacquadio kp32497</p>
+<div id="data-wrangling-and-data-exploration" class="section level2">
+<h2>Data Wrangling and Data Exploration</h2>
+<div id="instructions" class="section level3">
+<h3>Instructions</h3>
+<p>A knitted R Markdown document (ideally HTML) and the raw R Markdown file (as .Rmd) should both be submitted to Canvas by 11:59pm on the due date. These two documents will be graded jointly, so they must be consistent (i.e., don’t change the R Markdown file without also updating the knitted document).</p>
+<p>The text of the document should provide a narrative structure around your code/output. All results presented must have corresponding code. Any answers/results/plots etc. given without the corresponding R code that generated the result will not be considered. Furthermore, all code contained in your final project document must work correctly (knit early, knit often)! Please do not include any extraneous code or code which produces error messages. (Code that produces warnings is acceptable, as long as you understand what the warnings mean!)</p>
+</div>
+<div id="find-data" class="section level3">
+<h3>Find data:</h3>
+<p>Find two (!) datasets with one variable in common (e.g., dates, times, states, counties, countries, sports players), both with at least 50 observations (i.e., rows) in each. Please think very carefully about whether it makes sense to combine your datasets! If you find one dataset with 50 patients and it has their age, and you find another dataset with 50 <em>different</em> patients that has their ages, it makes no sense to join them based on age (you would just be pairing up random people of the same age).</p>
+<p>When combined, the resulting/final dataset must have <strong>at least 4 different variables (at least 3 numeric) in addition to the common variable</strong> (i.e., five variables total).</p>
+<p>You can have as many variables as you would like! If you found two datasets that you like but they don’t have enough variables, find a third dataset with the same common variable and join all three.</p>
+</div>
+<div id="guidelines" class="section level3">
+<h3>Guidelines</h3>
+<ol style="list-style-type: decimal">
+<li><p>If the datasets are not tidy, you will need to reshape them so that every observation has its own row and every variable its own column. If the datasets are both already tidy, you will make them untidy with <code>pivot_wider()/spread()</code> and then tidy them again with <code>pivot_longer/gather()</code> to demonstrate your use of the functions. It’s fine to wait until you have your descriptives to use these functions (e.g., you might want to pivot_wider() to rearrange the data to make your descriptive statistics easier to look at); it’s fine long as you use them at least once!</p>
+<ul>
+<li><p>Depending on your datasets, it might be a good idea to do this before joining. For example, if you have a dataset you like with multiple measurements per year, but you want to join by year, you could average over your numeric variables to get means/year, do counts for your categoricals to get a counts/year, etc.</p></li>
+<li><p>If your data sets are already tidy, demonstrate the use of <code>pivot_longer()/gather()</code> and <code>pivot_wider()/spread()</code> on all or part of your data at some point in this document (e.g., after you have generated summary statistics in part 3, make a table of them wide instead of long).</p></li>
+</ul></li>
+<li><p>Join your 2+ separate data sources into a single dataset based on a common ID variable! If you can’t find a good pair datasets to join, you may split one main dataset into two different datasets with a common ID variable in each, and then join them back together based on that common ID, but this is obviously less than ideal.</p>
+<ul>
+<li>You will document the type of join that you do (left/right/inner/full), including a discussion of how many observations were in each dataset, which observations in each dataset were dropped (if any) and why you chose this particular join.</li>
+</ul></li>
+<li><p>Create summary statistics</p>
+<ul>
+<li><p>Use <em>all six</em> core <code>dplyr</code> functions (<code>filter, select, arrange, group_by, mutate, summarize</code>) to manipulate and explore your dataset. For mutate, create a new variable that is a function of at least one other variable, preferably using a dplyr vector function (see dplyr cheatsheet). It’s totally fine to use the <code>_if</code>, <code>_at</code>, <code>_all</code> versions of mutate/summarize instead (indeed, it is encouraged if you have lots of variables)</p></li>
+<li><p>Create summary statistics (<code>mean, sd, var, n, quantile, min, max, n_distinct, cor</code>, etc) for each of your numeric variables both overall and after grouping by one of your categorical variables (either together or one-at-a-time; if you have two categorical variables, try to include at least one statistic based on a grouping of two categorical variables simultaneously). If you do not have any categorical variables, create one using mutate (e.g., with <code>case_when</code> or <code>ifelse</code>) to satisfy the <code>group_by</code> requirements above. Ideally, you will find a way to show these summary statistics in an easy-to-read table (e.g., by reshaping). (You might explore the kable package for making pretty tables!) If you have lots of numeric variables (e.g., 10+), or your categorical variables have too many categories, just pick a few (either numeric variables or categories of a categorical variable) and summarize based on those. It would be a good idea to show a correlation matrix for your numeric variables (you will need it to make one of your plots).</p></li>
+</ul></li>
+<li><p>Make visualizations (three plots)</p>
+<ul>
+<li>Make a correlation heatmap of your numeric variables</li>
+<li>Create at least two additional plots of your choice with ggplot that highlight some of the more interesting features of your data.</li>
+<li>Each plot (besides the heatmap) should have at least three variables mapped to separate aesthetics</li>
+<li>Each should use different geoms (e.g., don’t do two geom_bars)</li>
+<li>At least one plot should include <code>stat="summary"</code></li>
+<li>Each plot should include a supporting paragraph describing the relationships that are being visualized and any trends that are apparent
+<ul>
+<li>It is fine to include more, but limit yourself to 4. Plots should avoid being redundant! Four bad plots will get a lower grade than two good plots, all else being equal.</li>
+</ul></li>
+<li>Make them pretty! Use correct labels, etc.</li>
+</ul></li>
+<li><p>Perform k-means/PAM clustering or PCA on (at least) your numeric variables.</p>
+<ul>
+<li><p>Include all steps as we discuss in class, including a visualization.</p></li>
+<li><p>If you don’t have at least 3 numeric variables, or you want to cluster based on categorical variables too, convert them to factors in R, generate Gower’s dissimilarity matrix on the data, and do PAM clustering on the dissimilarities.</p></li>
+<li><p>Show how you chose the final number of clusters/principal components</p></li>
+<li><p>Interpret the final clusters/principal components</p></li>
+<li><p>For every step, document what your code does (in words) and what you see in the data!</p></li>
+</ul></li>
+</ol>
+<P style="page-break-before: always">
+<div style="page-break-after: always;"></div>
+</div>
+<div id="rubric" class="section level3">
+<h3>Rubric</h3>
+<p>Prerequisite: Finding appropriate data from at least two sources per the instructions above: Failure to do this will result in a 0! You will submit a .Rmd file and a knitted document (html/pdf).</p>
+<div id="introduction-4-pts" class="section level4">
+<h4>0. Introduction (4 pts)</h4>
+<ul>
+<li>Write a narrative introductory paragraph or two describing the datasets you have chosen, the variables they contain, how they were acquired, and why they are interesting to you. Expand on potential associations you may expect, if any.</li>
+</ul>
+<p><em>The first of the datasets acquired for this project include the prevalence of obesity among children and adolescents (ages 5 to 9) in percentages in the year 2016 for both males and females in recorded countries across the globe. The second dataset shares the common ID of country found in the first dataset and includes years of data collected for cesarean sections performed and total percent performed. These were acquired by querying the World Health Organization database. I find these data interesting as obesity is becoming a global epidemic and can be influenced by environmental variations individuals are exposed to. One associated finding with obesity is a change in microbial community ratio of lean vs obese subjects in a multitude of studies. Interestingly, at birth a large and vital microbial community is introduced to the offspring upon exiting the mother’s body naturally. However, these communities are not acquired in needed abundance if the child is delivered via cesarean section and shift the balance/abundance of communities found in the gut. Therefore, I was curious to see if rate of cesarean section corresponded to the prevalence in obesity in both males and females between ages 5 and 9 in these countries.</em></p>
+<p><em>I would speculate that the countries who more widely use c. section as an alternative means for child birth that a greater percentage of children may also be impacted by obesity, and thus increasing prevalence of obesity in the corresponding country.</em></p>
+<p>#Load in proper packages</p>
+<pre class="r"><code>library(tidyverse)
+library(ggplot2)
+library(cluster)
+library(GGally)</code></pre>
+<p>#Import Data</p>
+<pre class="r"><code>obesityprev &lt;- read.csv(&quot;obesityprev.csv&quot;, header = TRUE)
+csection &lt;- read.csv(&quot;csection1.csv&quot;, header = TRUE)</code></pre>
+</div>
+<div id="tidying-rearranging-widelong-8-pts" class="section level4">
+<h4>1. Tidying: Rearranging Wide/Long (8 pts)</h4>
+<ul>
+<li>Tidy the datasets (using the <code>tidyr</code> functions <code>pivot_longer</code>/<code>gather</code> and/or <code>pivot_wider</code>/<code>spread</code>)</li>
+<li>If you data sets are already tidy, be sure to use those functions somewhere else in your project (e.g., for rearranging summary statistics)</li>
+<li>Document the process (describe in words what was done)</li>
+</ul>
+</div>
+<div id="joiningmerging-8-pts" class="section level4">
+<h4>2. Joining/Merging (8 pts)</h4>
+<ul>
+<li>Join your datasets into one using a <code>dplyr</code> join function</li>
+<li>If you have multiple observations on the joining variable in either dataset, fix this by collapsing via summarize</li>
+<li>Discuss the process in words, including why you chose the join you did</li>
+<li>Discuss which cases were dropped, if any, and potential problems with this</li>
+</ul>
+<p>#Joining datasets using left_join</p>
+<pre class="r"><code>csobesity &lt;- left_join(csection, obesityprev, by = &quot;Country&quot;)</code></pre>
+<p><em>The process used to join the ‘csection’ and the ‘obesityprev’ datasets to combine into one dataset termed ‘csobesity’ was left_join. The command left_join is one of the most common join commands used. It allows the datasets to be combined based on one common variable (in this case it was Country). It kept all of the rows (observations) from the csection dataset and added the rows from obesityprev that had matches with the common variable ‘Country’. If there were countries included in the obesityprev dataset that were not also in the csection dataset then they would have been dropped out of the joined dataset. The resulting dataset ‘csobesity’ has the same amount of rows as the original dataset csection. However, the dataset ‘obesityprev’ did not have the same amount of rows and identical countries so there were approximately 19 countries lost in the join. This may neglect to analyze some countries where cases of obesity prevelance are high, but they would not be impactful findings in respect to the question being asked here which is how c.section and obesity prevelance are related.</em></p>
+</div>
+<div id="wrangling-36-pts" class="section level4">
+<h4>3. Wrangling (36 pts)</h4>
+<ul>
+<li><p>Use all six core <code>dplyr</code> functions in the service of generating summary tables/statistics (12 pts)</p>
+<ul>
+<li>Use mutate at least once to generate a variable that is a function of at least one other variable</li>
+</ul></li>
+<li><p>Compute summary statistics for each of your variables using <code>summarize</code> alone and with <code>group_by</code> (if you have more than 10 variables, fine to just focus on 10) (20 pts)</p>
+<ul>
+<li>Use at least 5 unique functions inside of summarize (e.g., mean, sd)</li>
+<li>For at least 2, use summarize after grouping by a categorical variable. Create one by dichotomizing a numeric if necessary</li>
+<li>If applicable, at least 1 of these should group by two categorical variables</li>
+</ul></li>
+<li><p>Summarize/discuss all (or the most interesting) results in no more than two paragraphs (4 pts)</p></li>
+<li><p>Tidy the datasets (using the <code>tidyr</code> functions <code>pivot_longer</code>/<code>gather</code> and/or <code>pivot_wider</code>/<code>spread</code>)</p></li>
+<li><p>If you data sets are already tidy, be sure to use those functions somewhere else in your project (e.g., for rearranging summary statistics)</p></li>
+<li><p>Document the process (describe in words what was done)</p></li>
+</ul>
+<pre class="r"><code># Obtaining summary statistics for cesarean section that
+# include mean, standard deviation and standard error across
+# all countries. Using summarize alone with 3 unique
+# functions inside summarize
+csobesity %&gt;% na.omit %&gt;% summarize(mean_csec = mean(Births.by.caesarean.section...., 
+    na.rm = T), sd_csec = sd(Births.by.caesarean.section...., 
+    na.rm = T), n = n(), se_csec = sd_csec/sqrt(n))</code></pre>
+<pre><code>##   mean_csec  sd_csec   n  se_csec
+## 1   20.0936 13.86854 172 1.057466</code></pre>
+<pre class="r"><code># Obtaining median, minimum and maximum for cesarean section
+# across all countries.  Using summarize alone with 3 unique
+# functions inside summarize
+csobesity %&gt;% na.omit %&gt;% summarize(mediancs = median(Births.by.caesarean.section...., 
+    na.rm = T), minsc = min(Births.by.caesarean.section...., 
+    na.rm = T), maxsc = max(Births.by.caesarean.section...., 
+    na.rm = T), n_rows = n(), n_Countries = n_distinct(Country))</code></pre>
+<pre><code>##   mediancs minsc maxsc n_rows n_Countries
+## 1    18.45   1.4  58.1    172         169</code></pre>
+<pre class="r"><code># Observing only countries and corresponding Male and Female
+# obesity prevalence that fall in between 25% and 59% births
+# by cesarean section.  Using function filter in dplyr
+csobesity %&gt;% na.omit %&gt;% filter(between(Births.by.caesarean.section...., 
+    25, 59))</code></pre>
+<pre><code>##                             Country      Year Births.by.caesarean.section....
+## 1                           Albania      2013                            34.1
+## 2                         Argentina      2011                            29.1
+## 3                         Australia      2015                            33.3
+## 4                           Austria      2016                            29.5
+## 5                        Azerbaijan      2015                            27.6
+## 6                           Bahrain      2015                            28.0
+## 7                        Bangladesh 2013-2016                            30.7
+## 8                           Belarus      2014                            27.1
+## 9                            Belize 2013-2016                            34.2
+## 10 Bolivia (Plurinational State of) 2011-2016                            33.4
+## 11                           Brazil      2015                            55.5
+## 12                         Bulgaria      2014                            39.1
+## 13                           Canada      2015                            27.9
+## 14                            Chile      2012                            49.6
+## 15                            China      2014                            34.9
+## 16                         Colombia      2016                            45.8
+## 17                             Cuba 2012-2014                            40.4
+## 18                           Cyprus      2015                            56.9
+## 19                          Czechia      2012                            25.9
+## 20               Dominican Republic      2012                            58.1
+##    Male Female
+## 1  13.3    7.9
+## 2  25.6   17.8
+## 3  16.1   12.9
+## 4  13.0    7.8
+## 5   7.4    5.8
+## 6  22.0   18.3
+## 7   4.4    3.2
+## 8  13.0    6.4
+## 9  16.0   14.7
+## 10 12.7   10.8
+## 11 17.6   12.4
+## 12 17.1   10.2
+## 13 16.8   11.5
+## 14 21.4   15.8
+## 15 22.3   11.8
+## 16  9.8    7.4
+## 17 16.7   14.0
+## 18 19.6   12.0
+## 19 15.7    8.8
+## 20 19.7   17.4
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 43 rows ]</code></pre>
+<pre class="r"><code># Interested in obtaining the descending order of births by
+# cesarean section, male and female obesity prevalence to
+# understand which countries maintain the highest of each.
+# Using function arrange in dplyr
+csobesity %&gt;% na.omit %&gt;% arrange(desc(Births.by.caesarean.section....))</code></pre>
+<pre><code>##                       Country      Year Births.by.caesarean.section.... Male
+## 1          Dominican Republic      2012                            58.1 19.7
+## 2                      Cyprus      2015                            56.9 19.6
+## 3                      Brazil      2015                            55.5 17.6
+## 4                       Egypt 2009-2014                            51.8 20.5
+## 5                       Chile      2012                            49.6 21.4
+## 6                     Ecuador      2015                            49.0 13.8
+## 7                      Turkey 2008-2013                            48.1 16.0
+## 8                     Lebanon      2016                            47.1 20.9
+## 9                    Paraguay 2014-2016                            45.9 14.9
+## 10                   Colombia      2016                            45.8  9.8
+## 11 Iran (Islamic Republic of) 2008-2010                            45.6 13.1
+## 12                  Mauritius      2016                            45.4  5.3
+## 13                    Georgia      2015                            41.4 10.9
+## 14                   Maldives      2014                            41.2 12.4
+## 15                     Mexico 2013-2015                            40.7 19.9
+## 16                       Cuba 2012-2014                            40.4 16.7
+## 17                    Romania      2013                            40.1 13.5
+## 18                    Uruguay      2015                            39.4 20.0
+## 19                   Bulgaria      2014                            39.1 17.1
+## 20          Republic of Korea 2013-2015                            39.1 17.4
+##    Female
+## 1    17.4
+## 2    12.0
+## 3    12.4
+## 4    23.2
+## 5    15.8
+## 6    10.5
+## 7    13.8
+## 8    15.4
+## 9    11.7
+## 10    7.4
+## 11    9.8
+## 12    7.1
+## 13    6.0
+## 14    6.9
+## 15   15.0
+## 16   14.0
+## 17    8.2
+## 18   14.4
+## 19   10.2
+## 20    7.1
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 152 rows ]</code></pre>
+<pre class="r"><code>csobesity %&gt;% na.omit %&gt;% arrange(desc(Male))</code></pre>
+<pre><code>##                             Country      Year Births.by.caesarean.section....
+## 1                             Nauru 2002-2007                             7.5
+## 2                  Marshall Islands 2002-2007                             9.3
+## 3                            Tuvalu 2002-2007                             7.1
+## 4                             Tonga 2007-2012                            17.4
+## 5                          Kiribati 2004-2009                             9.6
+## 6                             Qatar 2010-2012                            19.5
+## 7                         Argentina      2011                            29.1
+## 8          United States of America      2015                            32.0
+## 9  Micronesia (Federated States of)      2006                            10.5
+## 10                            Samoa 2009-2014                             4.6
+## 11             United Arab Emirates      2013                            23.9
+## 12                            China      2014                            34.9
+## 13                          Bahrain      2015                            28.0
+## 14                            Chile      2012                            49.6
+## 15                     Saudi Arabia      2016                            30.2
+## 16                          Lebanon      2016                            47.1
+## 17                      New Zealand      2015                            25.5
+## 18                            Egypt 2009-2014                            51.8
+## 19                            Italy      2014                            35.0
+## 20                             Oman      2016                            19.5
+##    Male Female
+## 1  36.1   36.5
+## 2  30.3   32.2
+## 3  29.8   32.5
+## 4  27.5   32.9
+## 5  26.8   28.3
+## 6  26.2   19.2
+## 7  25.6   17.8
+## 8  25.1   20.3
+## 9  23.8   26.7
+## 10 23.8   26.0
+## 11 22.7   18.1
+## 12 22.3   11.8
+## 13 22.0   18.3
+## 14 21.4   15.8
+## 15 21.3   15.4
+## 16 20.9   15.4
+## 17 20.6   16.7
+## 18 20.5   23.2
+## 19 20.5   14.9
+## 20 20.2   16.1
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 152 rows ]</code></pre>
+<pre class="r"><code>csobesity %&gt;% na.omit %&gt;% arrange(desc(Female))</code></pre>
+<pre><code>##                               Country      Year Births.by.caesarean.section....
+## 1                               Nauru 2002-2007                             7.5
+## 2                               Tonga 2007-2012                            17.4
+## 3                              Tuvalu 2002-2007                             7.1
+## 4                    Marshall Islands 2002-2007                             9.3
+## 5                            Kiribati 2004-2009                             9.6
+## 6    Micronesia (Federated States of)      2006                            10.5
+## 7                               Samoa 2009-2014                             4.6
+## 8                               Egypt 2009-2014                            51.8
+## 9            United States of America      2015                            32.0
+## 10                              Qatar 2010-2012                            19.5
+## 11                            Bahrain      2015                            28.0
+## 12               United Arab Emirates      2013                            23.9
+## 13                          Argentina      2011                            29.1
+## 14                 Dominican Republic      2012                            58.1
+## 15                               Iraq      2012                            24.4
+## 16                        New Zealand      2015                            25.5
+## 17 Venezuela (Bolivarian Republic of)      2009                            32.2
+## 18                            Jamaica 2009-2011                            21.2
+## 19                               Oman      2016                            19.5
+## 20                              Chile      2012                            49.6
+##    Male Female
+## 1  36.1   36.5
+## 2  27.5   32.9
+## 3  29.8   32.5
+## 4  30.3   32.2
+## 5  26.8   28.3
+## 6  23.8   26.7
+## 7  23.8   26.0
+## 8  20.5   23.2
+## 9  25.1   20.3
+## 10 26.2   19.2
+## 11 22.0   18.3
+## 12 22.7   18.1
+## 13 25.6   17.8
+## 14 19.7   17.4
+## 15 18.1   17.1
+## 16 20.6   16.7
+## 17 18.5   16.2
+## 18 16.8   16.1
+## 19 20.2   16.1
+## 20 21.4   15.8
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 152 rows ]</code></pre>
+<pre class="r"><code># if we are not necessarily interested in the year c section
+# data was collected then we can drop that column and only
+# select country, c section, male and female percentages.
+# Using function select in dplyr
+csproper &lt;- select(csobesity, -Year)
+csproper</code></pre>
+<pre><code>##                             Country Births.by.caesarean.section.... Male Female
+## 1                       Afghanistan                             2.7  4.2    4.2
+## 2                           Albania                            34.1 13.3    7.9
+## 3                           Algeria                            16.0 17.6   15.4
+## 4                            Angola                             3.7  2.5    4.0
+## 5                         Argentina                            29.1 25.6   17.8
+## 6                           Armenia                            18.0  7.4    5.8
+## 7                         Australia                            33.3 16.1   12.9
+## 8                           Austria                            29.5 13.0    7.8
+## 9                        Azerbaijan                            27.6  7.4    5.8
+## 10                          Bahrain                            28.0 22.0   18.3
+## 11                       Bangladesh                            30.7  4.4    3.2
+## 12                         Barbados                            21.3 15.8   15.1
+## 13                          Belarus                            27.1 13.0    6.4
+## 14                          Belgium                            21.2  9.8    7.4
+## 15                           Belize                            34.2 16.0   14.7
+## 16                            Benin                             5.3  2.1    5.1
+## 17                           Bhutan                            12.4  5.8    3.5
+## 18 Bolivia (Plurinational State of)                            33.4 12.7   10.8
+## 19           Bosnia and Herzegovina                            24.0  9.6    6.3
+## 20                           Brazil                            55.5 17.6   12.4
+## 21                         Bulgaria                            39.1 17.1   10.2
+## 22                     Burkina Faso                             3.7  1.1    1.5
+## 23                          Burundi                             4.0  1.7    3.4
+## 24                         Cambodia                             6.3  7.0    1.9
+## 25                         Cameroon                             2.4  2.2    5.3
+##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 151 rows ]</code></pre>
+<pre class="r"><code># Creating a new variable that includes the ratio of male
+# obesity prevalence to births by cesarean section and female
+# obesity prevalence to births by cesarean section,
+# respectively.  Using function mutate in dplyr in
+# conjunction with group by using a categorical variable
+csobesity %&gt;% na.omit %&gt;% group_by(Country) %&gt;% mutate(malebmi_to_csection = Male/Births.by.caesarean.section....)</code></pre>
+<pre><code>## # A tibble: 172 x 6
+## # Groups:   Country [169]
+##    Country    Year     Births.by.caesarean.secti…  Male Female malebmi_to_csect…
+##    &lt;fct&gt;      &lt;fct&gt;                         &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;             &lt;dbl&gt;
+##  1 Afghanist… 2010-20…                        2.7   4.2    4.2             1.56 
+##  2 Albania    2013                           34.1  13.3    7.9             0.390
+##  3 Algeria    2010-20…                       16    17.6   15.4             1.1  
+##  4 Angola     2010-20…                        3.7   2.5    4               0.676
+##  5 Argentina  2011                           29.1  25.6   17.8             0.880
+##  6 Armenia    2010-20…                       18     7.4    5.8             0.411
+##  7 Australia  2015                           33.3  16.1   12.9             0.483
+##  8 Austria    2016                           29.5  13      7.8             0.441
+##  9 Azerbaijan 2015                           27.6   7.4    5.8             0.268
+## 10 Bahrain    2015                           28    22     18.3             0.786
+## # … with 162 more rows</code></pre>
+<pre class="r"><code>csobesity %&gt;% na.omit %&gt;% group_by(Country) %&gt;% mutate(femalebmi_to_csection = Female/Births.by.caesarean.section....)</code></pre>
+<pre><code>## # A tibble: 172 x 6
+## # Groups:   Country [169]
+##    Country    Year    Births.by.caesarean.sect…  Male Female femalebmi_to_csect…
+##    &lt;fct&gt;      &lt;fct&gt;                       &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;               &lt;dbl&gt;
+##  1 Afghanist… 2010-2…                       2.7   4.2    4.2               1.56 
+##  2 Albania    2013                         34.1  13.3    7.9               0.232
+##  3 Algeria    2010-2…                      16    17.6   15.4               0.962
+##  4 Angola     2010-2…                       3.7   2.5    4                 1.08 
+##  5 Argentina  2011                         29.1  25.6   17.8               0.612
+##  6 Armenia    2010-2…                      18     7.4    5.8               0.322
+##  7 Australia  2015                         33.3  16.1   12.9               0.387
+##  8 Austria    2016                         29.5  13      7.8               0.264
+##  9 Azerbaijan 2015                         27.6   7.4    5.8               0.210
+## 10 Bahrain    2015                         28    22     18.3               0.654
+## # … with 162 more rows</code></pre>
+<pre class="r"><code># Obtaining summary statistics for cesarean section births as
+# it is grouped by male obesity prevalence Using summarize
+# inside of group by that includes 3 unique functions inside
+# of summarize
+csobesity %&gt;% na.omit %&gt;% group_by(Male) %&gt;% summarize(mean_csec = mean(Births.by.caesarean.section...., 
+    na.rm = T), sd_csec = sd(Births.by.caesarean.section...., 
+    na.rm = T), n = n(), se_csec = sd_csec/sqrt(n))</code></pre>
+<pre><code>## # A tibble: 120 x 5
+##     Male mean_csec sd_csec     n se_csec
+##    &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
+##  1   0.8      5.3    NA        1   NA   
+##  2   0.9     13      NA        1   NA   
+##  3   1        1.4    NA        1   NA   
+##  4   1.1      3.7    NA        1   NA   
+##  5   1.2      1.9    NA        1   NA   
+##  6   1.4      2.25    1.20     2    0.85
+##  7   1.5      5.5    NA        1   NA   
+##  8   1.6      6.1    NA        1   NA   
+##  9   1.7      6.57    5.43     3    3.13
+## 10   1.8      5.75    4.17     2    2.95
+## # … with 110 more rows</code></pre>
+<pre class="r"><code># Obtaining summary statistics for cesarean section births as
+# it is grouped by female obesity prevalence Using summarize
+# inside of group by that includes 3 unique functions inside
+# of summarize
+csobesity %&gt;% na.omit %&gt;% group_by(Female) %&gt;% summarize(mean_csec = mean(Births.by.caesarean.section...., 
+    na.rm = T), sd_csec = sd(Births.by.caesarean.section...., 
+    na.rm = T), n = n(), se_csec = sd_csec/sqrt(n))</code></pre>
+<pre><code>## # A tibble: 108 x 5
+##    Female mean_csec sd_csec     n se_csec
+##     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
+##  1    1.5      3.7    NA        1   NA   
+##  2    1.9      6.3    NA        1   NA   
+##  3    2        4.9    NA        1   NA   
+##  4    2.3     14.7    18.1      2   12.8 
+##  5    2.6      9.55   10.8      2    7.65
+##  6    2.7      2.8    NA        1   NA   
+##  7    2.8      5.2     5.37     2    3.8 
+##  8    2.9     10.5    12.9      2    9.15
+##  9    3.2     30.7    NA        1   NA   
+## 10    3.4      9.58    7.07     4    3.54
+## # … with 98 more rows</code></pre>
+<p><em>Interestingly, at first glance when comparing the descending order of cesarean section to male and female obesity prevalence we do not see many similarities in countries that appear in the top 10 between the 3. By just reviewing the data it should be noted that both the highest male and female obesity prevalence between the ages of 5 and 9 is found in the country of Nauru. This particular country is notably struggling with obesity. In fact, WHO has identified that approximately 71.1% of Nauru inhabitants are obese, topping at the highest rate across the globe. I’d also like to note that approximately only 63 countries of the total 176 found in the csobesity dataset have births by cesarean section that fall between 25% and 59% (the maximum being 58.1%). Less than half of countries listed partake in births by cesearean section above the mean and median. However, this may not be indicative of obesity prevelance in either gender in the analysis performed thus far.</em></p>
+<pre class="r"><code># Manipulating data in the form of pivot_wider to make the
+# dataset untidy
+cswide &lt;- csobesity %&gt;% pivot_wider(names_from = &quot;Country&quot;, values_from = &quot;Births.by.caesarean.section....&quot;)
+head(cswide)</code></pre>
+<pre><code>## # A tibble: 6 x 176
+##   Year   Male Female Afghanistan Albania Algeria Angola Argentina Armenia
+##   &lt;fct&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;list&gt;      &lt;list&gt;  &lt;list&gt;  &lt;list&gt; &lt;list&gt;    &lt;list&gt; 
+## 1 2010…   4.2    4.2 &lt;dbl [1]&gt;   &lt;NULL&gt;  &lt;NULL&gt;  &lt;NULL&gt; &lt;NULL&gt;    &lt;NULL&gt; 
+## 2 2013   13.3    7.9 &lt;NULL&gt;      &lt;dbl [… &lt;NULL&gt;  &lt;NULL&gt; &lt;NULL&gt;    &lt;NULL&gt; 
+## 3 2010…  17.6   15.4 &lt;NULL&gt;      &lt;NULL&gt;  &lt;dbl [… &lt;NULL&gt; &lt;NULL&gt;    &lt;NULL&gt; 
+## 4 2010…   2.5    4   &lt;NULL&gt;      &lt;NULL&gt;  &lt;NULL&gt;  &lt;dbl … &lt;NULL&gt;    &lt;NULL&gt; 
+## 5 2011   25.6   17.8 &lt;NULL&gt;      &lt;NULL&gt;  &lt;NULL&gt;  &lt;NULL&gt; &lt;dbl [1]&gt; &lt;NULL&gt; 
+## 6 2010…   7.4    5.8 &lt;NULL&gt;      &lt;NULL&gt;  &lt;NULL&gt;  &lt;NULL&gt; &lt;NULL&gt;    &lt;dbl […
+## # … with 167 more variables: Australia &lt;list&gt;, Austria &lt;list&gt;,
+## #   Azerbaijan &lt;list&gt;, Bahrain &lt;list&gt;, Bangladesh &lt;list&gt;, Barbados &lt;list&gt;,
+## #   Belarus &lt;list&gt;, Belgium &lt;list&gt;, Belize &lt;list&gt;, Benin &lt;list&gt;, Bhutan &lt;list&gt;,
+## #   `Bolivia (Plurinational State of)` &lt;list&gt;, `Bosnia and Herzegovina` &lt;list&gt;,
+## #   Brazil &lt;list&gt;, Bulgaria &lt;list&gt;, `Burkina Faso` &lt;list&gt;, Burundi &lt;list&gt;,
+## #   Cambodia &lt;list&gt;, Cameroon &lt;list&gt;, Canada &lt;list&gt;, `Central African
+## #   Republic` &lt;list&gt;, Chad &lt;list&gt;, Chile &lt;list&gt;, China &lt;list&gt;, Colombia &lt;list&gt;,
+## #   Comoros &lt;list&gt;, Congo &lt;list&gt;, `Costa Rica` &lt;list&gt;, `CÃ´te d&#39;Ivoire` &lt;list&gt;,
+## #   Croatia &lt;list&gt;, Cuba &lt;list&gt;, Cyprus &lt;list&gt;, Czechia &lt;list&gt;, `Democratic
+## #   People&#39;s Republic of Korea` &lt;list&gt;, `Democratic Republic of the
+## #   Congo` &lt;list&gt;, Denmark &lt;list&gt;, Djibouti &lt;list&gt;, `Dominican
+## #   Republic` &lt;list&gt;, Ecuador &lt;list&gt;, Egypt &lt;list&gt;, `El Salvador` &lt;list&gt;,
+## #   `Equatorial Guinea` &lt;list&gt;, Eritrea &lt;list&gt;, Estonia &lt;list&gt;,
+## #   Eswatini &lt;list&gt;, Ethiopia &lt;list&gt;, Finland &lt;list&gt;, France &lt;list&gt;,
+## #   Gabon &lt;list&gt;, Gambia &lt;list&gt;, Georgia &lt;list&gt;, Germany &lt;list&gt;, Ghana &lt;list&gt;,
+## #   Guatemala &lt;list&gt;, Guinea &lt;list&gt;, `Guinea-Bissau` &lt;list&gt;, Guyana &lt;list&gt;,
+## #   Haiti &lt;list&gt;, Honduras &lt;list&gt;, Hungary &lt;list&gt;, Iceland &lt;list&gt;,
+## #   India &lt;list&gt;, Indonesia &lt;list&gt;, `Iran (Islamic Republic of)` &lt;list&gt;,
+## #   Iraq &lt;list&gt;, Ireland &lt;list&gt;, Israel &lt;list&gt;, Italy &lt;list&gt;, Jamaica &lt;list&gt;,
+## #   Japan &lt;list&gt;, Jordan &lt;list&gt;, Kazakhstan &lt;list&gt;, Kenya &lt;list&gt;,
+## #   Kiribati &lt;list&gt;, Kyrgyzstan &lt;list&gt;, `Lao People&#39;s Democratic
+## #   Republic` &lt;list&gt;, Latvia &lt;list&gt;, Lebanon &lt;list&gt;, Lesotho &lt;list&gt;,
+## #   Liberia &lt;list&gt;, Lithuania &lt;list&gt;, Luxembourg &lt;list&gt;, Madagascar &lt;list&gt;,
+## #   Malawi &lt;list&gt;, Malaysia &lt;list&gt;, Maldives &lt;list&gt;, Mali &lt;list&gt;, Malta &lt;list&gt;,
+## #   `Marshall Islands` &lt;list&gt;, Mauritania &lt;list&gt;, Mauritius &lt;list&gt;,
+## #   Mexico &lt;list&gt;, `Micronesia (Federated States of)` &lt;list&gt;, Monaco &lt;list&gt;,
+## #   Mongolia &lt;list&gt;, Montenegro &lt;list&gt;, Morocco &lt;list&gt;, Mozambique &lt;list&gt;,
+## #   Myanmar &lt;list&gt;, Namibia &lt;list&gt;, …</code></pre>
+</div>
+<div id="visualizing-30-pts" class="section level4">
+<h4>4. Visualizing (30 pts)</h4>
+<ul>
+<li><p>Create a correlation heatmap of your numeric variables the way we did in class</p></li>
+<li><p>Create two effective, polished plots with ggplot</p>
+<ul>
+<li>Each plot should map 3+ variables to aesthetics</li>
+<li>Each plot should have a title and clean labeling for all mappings</li>
+<li>Change at least one default theme element and color for at least one mapping per plot</li>
+<li>For at least one plot, add more tick marks (x, y, or both) than are given by default</li>
+<li>For at least one plot, use the stat=“summary” function</li>
+<li>Supporting paragraph or two (for each plot) describing the relationships/trends that are apparent</li>
+</ul></li>
+</ul>
+<pre class="r"><code># Determining correlations of all numeric columns in csproper
+# so as to disregard the range of years and focus on the
+# c.section rate and obesity prevelance
+cormat &lt;- csproper %&gt;% select_if(is.numeric) %&gt;% cor(use = &quot;pair&quot;)
+head(cormat)</code></pre>
+<pre><code>##                                 Births.by.caesarean.section....      Male
+## Births.by.caesarean.section....                       1.0000000 0.5367198
+## Male                                                  0.5367198 1.0000000
+## Female                                                0.3223743 0.8715327
+##                                    Female
+## Births.by.caesarean.section.... 0.3223743
+## Male                            0.8715327
+## Female                          1.0000000</code></pre>
+<pre class="r"><code>tidycor &lt;- cormat %&gt;% as.data.frame %&gt;% rownames_to_column(&quot;var1&quot;) %&gt;% 
+    pivot_longer(-1, names_to = &quot;var2&quot;, values_to = &quot;correlation&quot;)
+tidycor</code></pre>
+<pre><code>## # A tibble: 9 x 3
+##   var1                            var2                            correlation
+##   &lt;chr&gt;                           &lt;chr&gt;                                 &lt;dbl&gt;
+## 1 Births.by.caesarean.section.... Births.by.caesarean.section....       1    
+## 2 Births.by.caesarean.section.... Male                                  0.537
+## 3 Births.by.caesarean.section.... Female                                0.322
+## 4 Male                            Births.by.caesarean.section....       0.537
+## 5 Male                            Male                                  1    
+## 6 Male                            Female                                0.872
+## 7 Female                          Births.by.caesarean.section....       0.322
+## 8 Female                          Male                                  0.872
+## 9 Female                          Female                                1</code></pre>
+<pre class="r"><code>tidycor %&gt;% ggplot(aes(var1, var2, fill = correlation)) + geom_tile() + 
+    scale_fill_gradient2(low = &quot;yellow&quot;, mid = &quot;orange&quot;, high = &quot;red&quot;) + 
+    geom_text(aes(label = round(correlation, 2)), color = &quot;white&quot;, 
+        size = 4) + xlab(&quot;Variable 1&quot;) + ylab(&quot;Variable 2&quot;) + 
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+    ggtitle(&quot;Correlation of Obesity Prevalence and C.Section Occurence&quot;) + 
+    coord_fixed()</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" />
+<em>The correlation matrix provided indicates that prevalence of obesity in males has a stronger correlation with births by c. section in comparison to female obesity prevalence. This may indicate that males are more susceptible to developing obesity due to lack of natural child birth and potentially microbial community restriction when compared to females.</em></p>
+<pre class="r"><code>ggplot(csproper, aes(x = Male, y = Female)) + geom_point(aes(color = Births.by.caesarean.section....)) + 
+    geom_smooth(aes(color = Births.by.caesarean.section....), 
+        method = &quot;lm&quot;) + theme_classic() + ggtitle(&quot;Obesity Prevalence In Relation to C. Section Occurence&quot;) + 
+    xlab(&quot;Male Prevalence&quot;) + ylab(&quot;Female Prevalence&quot;)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" />
+<em>The scatterplot is able to illustrate a different angle that may suggest c.section births and obesity prevalence are not as related as we suggested prior. Due to differences in country and their medicinal practices we may see obesity prevalence and c.section appear in greater numbers for some dots, but not all or even the majority. This could be due to after birth care which may include a microbial transfer from the mother to the baby by swab. Some modern studies suggest this is an efficient and effective way to incorporate microbial communities into the gut of the baby without invasive procedures.</em></p>
+<pre class="r"><code>ggplot(csproper, aes(Male, Female)) + geom_bar(stat = &quot;summary&quot;, 
+    aes(fill = Births.by.caesarean.section....)) + theme_minimal() + 
+    scale_x_continuous(name = &quot;Male Prevalence&quot;, limits = c(0, 
+        40)) + scale_y_continuous(name = &quot;Female Prevalence&quot;, 
+    limits = c(0, 40)) + ggtitle(&quot;Obesity Prevalence in Relation to C. Section Occurence&quot;)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" />
+<em>The bar graph shows that the rate and relationship between prevalence and c.section is weak. Perhaps it is very unlikely that we are seeing potential interrelation of microbiome effects, but rather what occurs during adolescents and adulthood. While this dataset maintains an age demographic between 5 and 9 we may still see dramatic effects on obesity strictly from diet. This could be both the childs diet after birth during a very sensitive time of development. It could also come from the mother’s diet as studies have shown a mother who over-eats and/or is obese can “program” their childhood for early onset obesity. Therefore, we may need to ask alternative questions with this dataset to fully understand what is driving obesity prevalence.</em></p>
+</div>
+<div id="dimensionality-reduction-20-pts" class="section level4">
+<h4>5. Dimensionality Reduction (20 pts)</h4>
+<ul>
+<li><p>Either k-means/PAM clustering or PCA (inclusive “or”) should be performed on at least three of your variables (3 is just the minimum: using more/all of them will make this much more interesting!)</p>
+<ul>
+<li>All relevant steps discussed in class</li>
+<li>A visualization of the clusters or the first few principal components (using ggplot2)</li>
+<li>Supporting paragraph or two describing results found, interpreting the clusters/PCs etc.</li>
+</ul></li>
+</ul>
+<pre class="r"><code># Selecting variables to include in calculating k-means
+clust_dat1 &lt;- csobesity %&gt;% na.omit %&gt;% dplyr::select(Births.by.caesarean.section...., 
+    Female, Male)</code></pre>
+<pre class="r"><code># This portion allows the silhouette width to be computed
+# with k-means. Silhouette width is able to illustrate how
+# similar each object will be to its own cluster when
+# compared to other clusters.
+sil_width &lt;- vector()  #empty vector to hold mean sil width
+for (i in 2:10) {
+    kms &lt;- kmeans(clust_dat1, centers = i)  #compute k-means solution
+    sil &lt;- silhouette(kms$cluster, dist(clust_dat1))  #get sil widths
+    sil_width[i] &lt;- mean(sil[, 3])  #take averages (higher is better)
+}
+ggplot() + geom_line(aes(x = 1:10, y = sil_width)) + scale_x_continuous(name = &quot;k&quot;, 
+    breaks = 1:10)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># We selected to use a k of 2 from analysis done in the plot
+# above. the greateest silhouette width falls at
+# approximately a k of 2.
+pam1 &lt;- clust_dat1 %&gt;% pam(k = 2)
+pam1</code></pre>
+<pre><code>## Medoids:
+##      ID Births.by.caesarean.section.... Female Male
+## 133 131                             5.6    5.2  4.0
+## 26   26                            27.9   11.5 16.8
+## Clustering vector:
+##   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20 
+##   1   2   2   1   2   1   2   2   2   2   2   2   2   2   2   1   1   2   2   2 
+##  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40 
+##   2   1   1   1   1   2   1   1   2   2   2   1   1   2   1   2   2   2   2   1 
+##  41  42  43  44  45  46  47  48  49  50  51  52  53  54  55  56  57  58  59  60 
+##   1   2   1   2   2   2   2   1   1   2   1   1   2   2   1   1   2   2   1   2 
+##  61  62  63  64  65  66  67  68  69  70  71  72  73  74  75  76  77  78  79  80 
+##   1   1   2   1   2   2   2   1   1   2   2   2   2   2   2   1   2   1   1   2 
+##  81  82  83  84  85  86  87  88  89  90  91  92  93  94  95  96  97  98  99 101 
+##   1   1   2   2   1   1   2   2   1   1   2   2   1   2   2   1   2   2   2   2 
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 72 entries ]
+## Objective function:
+##     build      swap 
+## 10.731439  9.301224 
+## 
+## Available components:
+##  [1] &quot;medoids&quot;    &quot;id.med&quot;     &quot;clustering&quot; &quot;objective&quot;  &quot;isolation&quot; 
+##  [6] &quot;clusinfo&quot;   &quot;silinfo&quot;    &quot;diss&quot;       &quot;call&quot;       &quot;data&quot;</code></pre>
+<pre class="r"><code>csobesity %&gt;% na.omit %&gt;% mutate(cluster = as.factor(pam1$clustering)) %&gt;% 
+    ggpairs(columns = c(&quot;Births.by.caesarean.section....&quot;, &quot;Male&quot;, 
+        &quot;Female&quot;), aes(color = cluster))</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;" />
+<em>The correlation between Male and C. Section is greater than Female and C. Section. It is interesting that both Male and Female have somewhat of a strong correlation. Likely, it is due to their similarities in prevalence as some rates between males and females were similar in some counties (ex: Nauru).</em></p>
+<pre class="r"><code>plot(pam1, which = 2)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-22-1.png" width="672" style="display: block; margin: auto;" />
+<em>The average silhouette width determined from the analysis above (0.48) indicates that the structure produced is weak and likely could be artificial. Looking more closely at the individual groups, it appears that the first group with the highest silhouette values (0.68) has the best support for a clustered structure. Overall, we can’t assume this is a viable structure to be basing our analysis from.</em></p>
+<pre class="r"><code>pamclust &lt;- clust_dat1 %&gt;% mutate(cluster = as.factor(pam1$clustering))
+pamclust %&gt;% group_by(cluster) %&gt;% summarize_if(is.numeric, mean, 
+    na.rm = T)</code></pre>
+<pre><code>## # A tibble: 2 x 4
+##   cluster Births.by.caesarean.section.... Female  Male
+##   &lt;fct&gt;                             &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+## 1 1                                  7.69   5.00  4.71
+## 2 2                                 28.8   12.8  16.1</code></pre>
+<pre class="r"><code>plot(pam1, which = 1)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-24-1.png" width="672" style="display: block; margin: auto;" />
+<em>It should be noted that the first two principle components are able to explain almost all of the point variability. There also appears to be a good amount of overlap which may be indicative later that our clusters are not very different from one another. This would also indicate that our variables are not very different from one another.</em></p>
+<pre class="r"><code>csob1 &lt;- csobesity %&gt;% na.omit %&gt;% dplyr::select(Births.by.caesarean.section...., 
+    Female, Male)</code></pre>
+<pre class="r"><code>eig1 &lt;- csob1 %&gt;% cor() %&gt;% eigen()</code></pre>
+<pre class="r"><code>eig1</code></pre>
+<pre><code>## eigen() decomposition
+## $values
+## [1] 2.18571435 0.71878973 0.09549592
+## 
+## $vectors
+##           [,1]       [,2]       [,3]
+## [1,] 0.4591281  0.8627016  0.2120079
+## [2,] 0.6037986 -0.4780918  0.6378522
+## [3,] 0.6516354 -0.1648458 -0.7404034</code></pre>
+<pre class="r"><code>eig1$vectors</code></pre>
+<pre><code>##           [,1]       [,2]       [,3]
+## [1,] 0.4591281  0.8627016  0.2120079
+## [2,] 0.6037986 -0.4780918  0.6378522
+## [3,] 0.6516354 -0.1648458 -0.7404034</code></pre>
+<pre class="r"><code>eig1$values</code></pre>
+<pre><code>## [1] 2.18571435 0.71878973 0.09549592</code></pre>
+<pre class="r"><code>scaled_clust &lt;- clust_dat1 %&gt;% scale
+PCAscores &lt;- scaled_clust %*% eig1$vectors
+PCAscores</code></pre>
+<pre><code>##            [,1]        [,2]         [,3]
+## 1   -1.72032034 -0.51681726 -0.087124090
+## 2    0.46743016  0.95696431 -0.142657311
+## 3    0.95605569 -0.82727198 -0.096389153
+## 4   -1.85515149 -0.40191164  0.077403625
+## 5    2.31833178 -0.36988404 -0.452339578
+## 6   -0.78169276  0.24388538 -0.011622008
+## 7    1.16032961  0.46980197  0.067059383
+## 8    0.27937358  0.68497535 -0.193120997
+## 9   -0.46387768  0.84105985  0.135132904
+## 10   2.01383705 -0.39603517 -0.060625508
+## 11  -0.87063526  1.29557291  0.220847927
+## 12   0.94533567 -0.43515858  0.133814727
+## 13   0.06719671  0.64077278 -0.370018270
+## 14  -0.31375117  0.26963438 -0.041435538
+## 15   1.35200544  0.39288688  0.271042875
+## 16  -1.73295315 -0.37608659  0.251854995
+## 17  -1.32534311  0.10365325 -0.168258201
+## 18   0.66660265  0.70903299  0.196816338
+## 19  -0.34286418  0.53081557 -0.088881698
+## 20   1.97932568  1.85504728  0.206999279
+## 21   1.18401011  1.01110170 -0.214249289
+## 22  -2.21484351 -0.18321274 -0.033569510
+## 23  -1.97220766 -0.32047588  0.101557063
+## 24  -1.57381181 -0.18229984 -0.541232140
+## 25  -1.80123602 -0.57371293  0.217595484
+## 26   0.91017877  0.22346423 -0.225398433
+## 27  -1.85567376 -0.34020684  0.099532486
+## 28  -2.13197364 -0.43802748  0.041607733
+## 29   2.43933553  1.14857127  0.078943184
+## 30   1.65234220  0.51445611 -0.635984930
+## 31   0.50064998  1.79989397  0.334623923
+## 32  -1.56430852 -0.11525282  0.287717695
+## 33  -1.96121243 -0.18821914 -0.154335384
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 139 rows ]</code></pre>
+<pre class="r"><code>csproper %&gt;% na.omit %&gt;% mutate(PC1 = PCAscores[, 1], PC2 = PCAscores[, 
+    2]) %&gt;% ggplot(aes(PC1, PC2, color = Births.by.caesarean.section....)) + 
+    geom_point()</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-29-1.png" width="672" style="display: block; margin: auto;" />
+<em>As briefly mentioned before, the clusters do not appear to sequester as they would if each sample or individual measurement were distinctly different from one another. It is interesting to note that those with a lower percent of c.section fall more in the lower values of PC1. Additionally, countries that had a higher number of c.sections appear to have higher values of PC2 and median values of PC1. This is not necessarily illustrating that being a part of one principle component indicates that a country that has high c.section percentages has a very small prevelenance of obesity in either gender. Instead, it is suggesting that if a country has a higher level of c.sections it does not cluster with those that also had high prevalence of obesity (male or female) since there is quite a bit of overlap in these clustered data.</em></p>
+</div>
+<div id="neatness-holisticdiscretionary-points-4-pts" class="section level4">
+<h4>6. Neatness, Holistic/Discretionary Points (4 pts)</h4>
+<ul>
+<li>Keep things looking nice! Your project should not knit to more than 30 or so pages (probably closer to 10-20)! You will lose points if you print out your entire dataset(s), have terrible formatting, etc. If you start your project in a fresh .Rmd file, you are advised to copy set-up code below and include it: this will do things like automatically truncate if you accidentally print out a huge dataset, etc. Imagine this is a polished report you are giving to your PI or boss to summarize your work researching a topic.</li>
+</ul>
+<pre class="r"><code>## paste this chunk into the ```{r setup} chunk at the top of
+## your project 1 .Rmd file
+
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, fig.align = &quot;center&quot;, 
+    warning = F, message = F, tidy = TRUE, tidy.opts = list(width.cutoff = 60), 
+    R.options = list(max.print = 100))</code></pre>
+<p>…</p>
+</div>
+</div>
+</div>
+
+            
+        <hr>         <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="../../js/docs.min.js"></script>
+<script src="../../js/main.js"></script>
+
+<script src="../../js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>

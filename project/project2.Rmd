@@ -1,0 +1,325 @@
+---
+title: 'Project 2: Modeling, Testing, and Predicting'
+author: "SDS348"
+date: ''
+output:
+  html_document:
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+hook_output = knit_hooks$get('output')
+knit_hooks$set(output = function(x, options) {
+  # this hook is used only when the linewidth option is not NULL
+  if (!is.null(n <- options$linewidth)) {
+    x = knitr:::split_lines(x)
+    # any lines wider than n should be wrapped
+    if (any(nchar(x) > n)) x = strwrap(x, width = n)
+    x = paste(x, collapse = '\n')
+  }
+  hook_output(x, options)
+})
+
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE,fig.align="center",warning=FALSE,message=FALSE,fig.width=8, fig.height=5, linewidth=60)
+options(tibble.width = 100,width = 100)
+library(tidyverse)
+```
+
+# Modeling
+
+## Instructions
+
+A knitted R Markdown document (preferably HTML) and the raw R Markdown file (as .Rmd) should both be submitted to Canvas by 11:59pm on the due date. These two documents will be graded jointly, so they must be consistent (i.e., don’t change the R Markdown file without also updating the knitted document). In the .Rmd file for Project 2, you can copy the first code-chunk into your project .Rmd file to get better formatting. Notice that you can adjust the opts_chunk$set(...) above to set certain parameters if necessary to make the knitting cleaner (you can globally set the size of all plots, etc). You can copy the set-up chunk in Project2.Rmd: I have gone ahead and set a few for you (such as disabling warnings and package-loading messges when knitting)! 
+
+Like before, I envision your written text forming something of a narrative structure around your code/output. All results presented must have corresponding code. Any answers/results/plots etc. given without the corresponding R code that generated the result will not be graded. Furthermore, all code contained in our project document should work properly. Please do not include any extraneous code or code which produces error messages. (Code which produces warnings is fine as long as you understand what the warnings mean.)
+
+## Find data:
+
+Find one dataset with at least 5 variables (ideally more!) that you want to use to build models/test hypotheses. At least one should be categorical (with 2-5 groups, ideally; definitely fewer than 10) and at least two should be numeric (taking on more than 10 distinct values). Ideally, at least of your variables will be binary (if not, you will have to create one by discretizing a numeric or collapsing levels of a categorical). You will need a minimum of 40 observations (*at least* 10 observations for every explanatory variable you have, ideally 20+ observations/variable).
+
+It is perfectly fine to use either dataset (or the merged dataset, or a subset of your variables) from Project 1. However, I might encourage you to diversify things a bit and choose a different dataset to work with (particularly if the variables did not reveal interesting associations in Project 1 that you want to follow up with). The only requirement/restriction is that you may not use data from any examples we have done in class or lab. It would be a good idea to pick more cohesive data this time around (i.e., variables that you actually thing might have a relationship you would want to test). Think more along the lines of your Biostats project.
+
+Again, you can use data from anywhere you want (see bottom for resources)! If you want a quick way to see whether a built-in (R) dataset has binary and/or character (i.e., categorical) variables, check out this list: https://vincentarelbundock.github.io/Rdatasets/datasets.html.
+
+
+## Guidelines and Rubric
+```{r}
+library(tidyverse)
+library(lmtest)
+library(sandwich)
+library(dplyr)
+library(ggplot2)
+library(caret)
+```
+
+- **0. (5 pts)** Introduce your dataset and each of your variables (or just your main variables if you have lots) in a paragraph. What are they measuring? How many observations?
+```{r}
+library(MASS)
+data(UScereal)
+summary(UScereal)
+```
+*The dataset being used for this projects is "UScereal" within the MASS package. Independent variables of interest include calories (number of calories in one portion), protein (grams of protein in one portion), fat (grams of fat in one portion), sodium (milligrams of sodium i one portion), fibre (grams of dietary fiber in one portion), carbo (grams of complex carbohydrates in one portion), and sugars (grams of sugars in one portion). The dependent variable of interest is mfr (manufacturer) that includes G=General Mills, K=Kellogs, N=Nabisco, P=Post, Q=Quaker Oats, and R=Ralston Purina. I am interested to know if there is a significant difference between manufacturer based on the components of each of the cereals they are producing. For example, does manufacturer A produce more cereals with greater fiber per portion and does manufacturer B produce more cereals with greater fat per portion? For the linear regression model I want to observe any differences in calories dependent on vitamins (categorical: 0, 25% or 100% fortified) and potassium content. I am interested to know whether the cereals provided to the general public have an increase in calories or decrease based on potassium (mineral) and vitamin content.The dichotomous variable to be used in future analyses will be a 0 or 1 with 1 being indicative of the cereal being placed on the second shelf. Manufacturers tend to prefer their products on shelves that sit at eye level for consumers to be more likely to purchase. I am interested to see if cereals that have greater sugar content are more prone to shelf 2 placement vs other cereals that are in shelves 1 or 3 which may be more "healthy".*
+
+- **1. (15 pts)** Perform a MANOVA testing whether any of your numeric variables (or a subset of them, if including them all is unreasonable or doesn't make sense) show a mean difference across levels of one of your categorical variables (3). If they do, perform univariate ANOVAs to find response(s) showing a mean difference across groups (3), and perform post-hoc t tests to find which groups differ (3). Discuss the number of tests you have performed, calculate the probability of at least one type I error (if unadjusted), and adjust the significance level accordingly (bonferroni correction) before discussing significant differences (3). Briefly discuss some of the MANOVA assumptions and whether or not they are likely to have been met here (no need for anything too in-depth) (2).
+```{r}
+obj<-summary(manova(cbind(calories,protein,fat,sodium,fibre,carbo,sugars)~mfr,data=UScereal))
+obj
+#Based on the MANHOVA result it appears there is a mean difference across levels of the categorical variable manufacturer (mfr) (p=0.0035).
+#summary.aov(obj)
+
+pairwise.t.test(UScereal$calories, UScereal$mfr, p.adj = "none")
+pairwise.t.test(UScereal$protein, UScereal$mfr, p.adj = "none")
+pairwise.t.test(UScereal$fat, UScereal$mfr, p.adj = "none")
+pairwise.t.test(UScereal$sodium, UScereal$mfr, p.adj = "none")
+pairwise.t.test(UScereal$fibre, UScereal$mfr, p.adj = "none")
+pairwise.t.test(UScereal$carbo, UScereal$mfr, p.adj = "none")
+pairwise.t.test(UScereal$sugars, UScereal$mfr, p.adj = "none")
+
+#performed 1 MANOVA, 7 ANOVAs, and 105 t.tests which results in 113 hypothesis tests
+typ1e <- 1-(.95^113)
+alpha <- .05/113
+```
+*The results of the MANOVA suggest there is a mean difference across levels of the categorical variable, manufacturer.*
+
+*There were significant differences between manufactueres and independent variables analyzed (met the criterion for significance p < 0.05). P was significantly different from G and R in calories, N was significantly differfent from G and R in protein, N was significantly different from G, K, P, Q and R in fibre, and R was significantly different from P and K in sugars.*
+
+*We conducted one MANOVA, 7 ANOVAS, and 105 t tests which resulted in 113 total tests and therefore, the probability of at least one type 1 error is (1-.95^113) 0.997. We would need to use a bonferroni adjusted significance level of 0.0004 to continue to keep the overall type 1 error rate at .05. The MANOVA assumptions that we likely have not met may include homogeneity of variance (we cannot be sure that variances are equal between groups, there are some clear outliers), adequate sample size (the number of observations per group may be too little to detect a significant and reliable result), normality of residuals may also be violated in this analysis, and we cannot assume linearity.* 
+
+- **2. (10 pts)** Perform some kind of randomization test on your data (that makes sense). The statistic can be anything you want (mean difference, correlation, F-statistic/ANOVA, chi-squared), etc. State null and alternative hypotheses, perform the test, and interpret the results (7). Create a plot visualizing the null distribution and the test statistic (3).
+```{r}
+#I am curious to see what the mean differences are between grams of sugar in one portion of cereal from two different manufacturers (Post and Ralston Purina). In the previous analysis it appeared significant and I would like to see if that difference in means remains true even after randomization.
+
+P<- c(7.462687,14.925373,16.000000,17.045455,5.681818,12.000000,12.121212,8.270677,20.895522)
+R <- c(8.955224,3.000000,6.666667,1.769912,4.477612)
+cerealsug <-data.frame(company=c(rep("P",9),rep("R",5)),sugar=c(P,R))
+head(cerealsug)
+
+cerealsug%>%group_by(company)%>%
+  summarize(means=mean(sugar))%>%summarize(`mean_diff`=diff(means))
+#mean_diff is -7.737533
+
+#randomization test on sugar in one portion of cereal between Post cereals and Ralston Purina cereals
+rand_dist<-vector()
+for(i in 1:5000){
+  new<-data.frame(sugar=sample(cerealsug$sugar),condition=cerealsug$company) 
+  rand_dist[i]<-mean(new[new$condition=="P",]$sugar)-
+    mean(new[new$condition=="R",]$sugar)}
+
+{hist(rand_dist,main="",ylab=""); abline(v = c(-7.737533, 7.737533),col="red")}
+mean(rand_dist>7.737533 | rand_dist < -7.737533)
+#p-value of the probability of observing a mean difference as extreme as the one we got under the "randomization distribution" (p=0.0114).
+```
+*The null hypothesis of this test is that there will be no difference in means of sugar per one portion of cereal between Post and Ralston Purina cereals. The alternative would be that there is a signficiant difference in means between the sugar content per one portion of cereal between Post and Ralston Purina cereals.*
+*The randomization test does agree in this case. Performing a randomization test on the sugar variable and calculating the p-value for the permutation test reinforced earlier findings that the companies Post and Ralston purina do not have the same sugar content per portion in their cereals on average (p=0.0114).*
+
+- **3. (40 pts)** Build a linear regression model predicting one of your response variables from at least 2 other variables, including their interaction. Mean-center any numeric variables involved in the interaction.
+```{r}
+#The variables chosen for the linear regression model include a dependent variable of calories and independent variables of potassium and vitamins and their interaction. It would be interesting to note whether the cereals provided to the general public have an increase in calories or decrease based on potassium (mineral) and vitamin content.
+UScereal$pot_ce <- UScereal$potassium - mean(UScereal$potassium,na.rm=T)
+fitcal<-lm(calories ~ pot_ce*vitamins, data=UScereal)
+summary(fitcal)
+```
+    - Interpret the coefficient estimates (do not discuss significance) (10)
+*Ignoring significance: The predicted value of calories is 138.6719 when both pot_ce and vitamins have values of 0. The slope for pot_ce on calories is 0.2277 while holding the variable vitamins constant meaning for every 1 unit increase in pot_ce, calories will increase by 0.2277. The slope for vitaminsenriched on calories is 14.0536 while holding pot_ce and vitaminsnone constant meaning for every 1 unit increase in vitaminsenriched, calories will increase by 14.0536. The slope for vitaminsnone on calories is -21.0255 while holding pot_ce and vitaminsenriched constant meaning for every 1 unit increase in vitaminsnone, calories will decrease by 21.0255. Slope of pot_ce by vitaminsenriched on calories is -0.0704 and slope of pot_ce by vitaminsnone on calories is 0.2337.*
+
+    - Plot the regression using `ggplot()` using geom_smooth(method="lm"). If your interaction is numeric by numeric, refer to code in the slides to make the plot or check out the `interactions` package, which makes this easier. If you have 3 or more predictors, just chose two of them to plot for convenience. (10)
+```{r}
+UScereal %>% ggplot(aes(pot_ce, calories, color=vitamins)) + geom_point()+geom_smooth(method="lm")
+```
+    - What proportion of the variation in the outcome does your model explain? (4)
+*The variables chosen to predict calories (potassium and vitamins) in UScereal do not explain a significant amount of variation in calories. Since neither potassium or vitamins are significant we cannot assume that the slope of each line is different from horizontal, and therefore, we cannot reject the null hypothesis.*
+
+    - Check assumptions of linearity, normality, and homoskedasticity either graphically or using a hypothesis test (5)
+*When testing for linearity it is ideal to have no fitted pattern in the residual plot. We would like to see the red line in a horizontal orientation, but it doesn't appear the data tested fit this parameter, and this indicates we may have a problem with the linear model.*   
+```{r}
+#Testing for linearity of the data
+plot(fitcal,1)
+```
+*It is ideal for a plot reflecting normality of the data to follow the dotted line. It is clear we have some notable outliers in this data (all-bran with extra fiber, great grains pecan, and grape-nuts). For future analysis we may want to exclude them from the model to minimize their influence on the variation and distrubtion of the model.*
+```{r}
+#Testing for normality of the data
+plot(fitcal,2)
+```
+*When testing for homoskedasticity of the data it is ideal that the residuals tend to spread equally along the range of predictors. In fact, the variability of the points plotted increase with the value of the fitted outcome variable which may mean that we have non-constant variances in the residuals errors and therefore, presence of homoskedasticity. Moving forward we may need to log transform the data.*
+```{r}
+#Testing for homoskedasticity of the data
+plot(fitcal,3)
+```
+    - Regardless, recompute regression results with robust standard errors via `coeftest(..., vcov=vcovHC(...))`. Discuss significance of results, including any changes from before/after robust SEs if applicable. (10)
+*After recomputing the regression model with robust standard errors there are no observed changes before/after robust SEs. Additionally, after adjusting there is still no significant effect of pot_ce, vitamins or their interactions on the outcome variable, calories.*    
+```{r}
+summary(fitcal)
+coeftest(fitcal, vcov = vcovHC(fitcal))
+```
+
+- **4. (5 pts)** Rerun same regression model (with the interaction), but this time compute bootstrapped standard errors (either by resampling observations or residuals). Discuss any changes you observe in SEs and p-values using these SEs compared to the original SEs and the robust SEs)
+```{r}
+#bootstrap SE of the slope by resampling observations with replacement
+samp_distn<-replicate(5000, { 
+  boot_dat<-boot_dat<-UScereal[sample(nrow(UScereal),replace=TRUE),]  
+  fit<-lm(calories ~ pot_ce, data=boot_dat)  
+  coef(fit) })
+
+#estimated SEs
+samp_distn%>%t%>%as.data.frame%>%summarize_all(sd)
+
+```
+
+- **5. (30 pts)** Fit a logistic regression model predicting a binary variable (if you don't have one, make/get one) from at least two explanatory variables (interaction not necessary). 
+```{r}
+cereal<-UScereal%>%mutate(y=ifelse(shelf=="2",1,0))
+head(cereal)
+
+gfitc<-glm(y~mfr+sugars, data=cereal, family= binomial (link="logit"))
+coeftest(gfitc)
+exp(coef(gfitc))
+```
+
+    - Interpret coefficient estimates in context (10)
+*The effect of mfr (each independently tested) or sugars does not have a significant effect on the outcome of shelf. Independent of significance, It is 0.961 times more likely that Kelloggs will be placed on the 2nd shelf, 0.000000023 times more likely that Nabisco will be placed on the second shelf, .185 that Post will be placed on the 2nd shelf, 3.74 times more likely that Quaker Oats will be placed on the 2nd shelf, .000000036 times more likely that Ralston Purina will be placed on the 2nd shelf, and 1.13 times more likely that cereals with sugars will be placed on the 2nd shelf.*
+    - Report a confusion matrix for your logistic regression (5)
+```{r}
+probs<-predict(gfitc,type="response")
+table(predict=as.numeric(probs>.5),truth=cereal$y)%>%addmargins
+```
+    - Compute and discuss the Accuracy, Sensitivity (TPR), Specificity (TNR), Precision (PPV), and AUC of your model (5)
+```{r}
+ACC<-(4+43)/65
+TPR<-4/18
+TNR<-43/47
+PPV<-4/8
+```
+
+```{r}
+library(knitr)
+opts_chunk$set(fig.align="center", fig.height=5, message=FALSE, warning=FALSE, fig.width=8, tidy.opts=list(width.cutoff=60),tidy=TRUE)
+
+class_diag<-function(probs,truth){
+  
+  tab<-table(factor(probs>.5,levels=c("FALSE","TRUE")),truth)
+  acc=sum(diag(tab))/sum(tab)
+  sens=tab[2,2]/colSums(tab)[2]
+  spec=tab[1,1]/colSums(tab)[1]
+  ppv=tab[2,2]/rowSums(tab)[2]
+
+  if(is.numeric(truth)==FALSE & is.logical(truth)==FALSE) truth<-as.numeric(truth)-1
+  
+  #CALCULATE EXACT AUC
+  ord<-order(probs, decreasing=TRUE)
+  probs <- probs[ord]; truth <- truth[ord]
+  
+  TPR=cumsum(truth)/max(1,sum(truth)) 
+  FPR=cumsum(!truth)/max(1,sum(!truth))
+  
+  dup<-c(probs[-1]>=probs[-length(probs)], FALSE)
+  TPR<-c(0,TPR[!dup],1); FPR<-c(0,FPR[!dup],1)
+  
+  n <- length(TPR)
+  auc<- sum( ((TPR[-1]+TPR[-n])/2) * (FPR[-1]-FPR[-n]) )
+
+  data.frame(acc,sens,spec,ppv,auc)
+}
+class_diag(probs,cereal$y)
+```
+*The sensitivity or the ability of detecting a cereal placed on shelf 2 is relatively low. However, the probability of detecting a true negative or cereal that will not be placed on the 2nd shelf could be considered "good". The accuracy of classifying the cereals on the second shelf of the total cereals classified is fair, and the precision is sacrificed a little with a less than ideal score of 0.5. The model is predicting cereals placed on the second shelf relatively fairly (0.744).*
+    - Using ggplot, make a density plot of the log-odds (logit) colored/grouped by your binary outcome variable (5)
+```{r}
+cereal$logit<-predict(gfitc,type="link") #get log-odds for everyone
+
+cereal%>% mutate(y=as.factor(y)) %>% ggplot()+geom_density(aes(logit,color=y,fill=y), alpha=.4)+
+  theme(legend.position=c(.85,.85))+geom_vline(xintercept=0)+xlab("logit (log-odds)")+
+  geom_rug(aes(logit,color=y))+
+  geom_text(x=-5,y=.07,label="TN = 431")+
+  geom_text(x=-1.75,y=.008,label="FN = 19")+
+  geom_text(x=1,y=.006,label="FP = 13")+
+  geom_text(x=5,y=.04,label="TP = 220")
+```
+
+    - Generate an ROC curve (plot) and calculate AUC (either manually or with a package); interpret (5)
+```{r}
+library(plotROC)
+ROCplot1 <- ggplot(gfitc)+geom_roc(aes(d=y,m=sugars), n.cut=0)
+ROCplot1
+
+calc_auc(ROCplot1)
+```
+*Based on the ROC curve it appears that this may be a less accurate test to detect the trade-off between sensitivity and specificity. The AUC value reflects a similar result as if falls under .7 which is considered fpoor, and potentially anything less would be a bad representation of the model.*
+
+- **6. (25 pts)** Perform a logistic regression predicting the same binary response variable from *ALL* of the rest of your variables (the more, the better!) 
+
+    - Fit model, compute in-sample classification diagnostics (Accuracy, Sensitivity, Specificity, Precision, AUC), and interpret (5)
+```{r}
+fit8<-glm(y~mfr+sugars+calories+protein+fat+sodium+fibre+carbo, data=cereal, family= binomial (link="logit"))
+coeftest(fit8)
+exp(coef(fit8))
+
+probs8<-predict(fit8,type="response")
+
+class_diag(probs8,cereal$y)
+```
+*Overall, adding in the remainder of the variables allowed the model to be a better predictor of shelf 2 cereals. Both sensitivity and specificity have increased from the previous model that included only mfr and sugars. The AUC has now reached a level considered good and very close to 1, indicating this as an improved model overall for accurate predictions.*
+
+    - Perform 10-fold (or repeated random sub-sampling) CV with the same model and report average out-of-sample classification diagnostics (Accuracy, Sensitivity, Specificity, Precision, and AUC); interpret AUC and compare with the in-sample metrics (10)
+```{r}
+set.seed(1234)
+k=6
+
+data <- cereal[sample(nrow(cereal)),]
+folds <- cut(seq(1:nrow(cereal)),breaks=k,labels=F)
+
+diags<-NULL
+for(i in 1:k){
+  train <- data[folds!=i,]
+  test <- data[folds==i,]
+  truth <- test$y
+  
+  fit <- glm(y~sugars, data=train, family="binomial")
+  probs <- predict(fit, newdata=test, type="response")
+  
+  diags<- rbind(diags,class_diag(probs,truth))
+}
+
+summarize_all(diags,mean)
+```
+*Interestingly, a k=6 is the only value to which the command will run without an "subscript out of bounds" error. This may have occurred due to the factor variable of y that has a low number of instances (shelf 2). However, this model has captured true negatives very well (which we observed previously). Accuracy and precision are low or not existent. The AUC level can be classified as poor. This model is not predictive of the outcome variable of interest, shelf.*    
+    - Perform LASSO on the same model/variables. Choose lambda to give the simplest model whose accuracy is near that of the best (i.e., `lambda.1se`). Discuss which variables are retained. (5)
+```{r}
+library(glmnet)
+set.seed(1234)
+
+y <- as.matrix(cereal$y)
+x <- model.matrix(y~., data=cereal)[,-1]
+x<-scale(x)
+cv <- cv.glmnet(x,y,family="binomial")
+lasso <- glmnet(x,y,family="binomial", lambda=cv$lambda.1se)
+coef(lasso)
+```
+*The variables retained after performing lasso include the manufacturers P=Post, Q=Quaker Oats, protein, carbo, sugars, and vitaminsenriched.*
+    - Perform 10-fold CV using only the variables lasso selected: compare model's out-of-sample AUC to that of your logistic regressions above (5)
+```{r}
+set.seed(1234)
+k=6
+data1<-cereal[sample(nrow(cereal)),]
+folds<-cut(seq(1:nrow(cereal)),breaks=k,labels=F)
+
+diags<-NULL
+for(i in 1:k){
+  train<-data1[folds!=i,]
+  test<-data1[folds==i,]
+  truth<-test$y
+  
+  fit<-glm(y~.,data=train,family="binomial")
+  probs<-predict(fit,newdata=test,type="response")
+  
+  diags<-rbind(diags,class_diag(probs,truth))
+}
+
+diags%>%summarize_all(mean)
+```
+*Once again reducing the folds to a k=6 allows the model to run. This may still be attributed to the limited amount of the outcome variable being true across the dataset. Interestingly, after including the variables in the model that lasso selected it appears that the model is more predictive of what the truth is for the outcome of interest. This is particularly highlighted by the increase in AUC. We can now say this model is a "fair" predictor of the true outcome.*
+
+...
