@@ -1,0 +1,49 @@
++++
+title = ""
+description = ""
+tags = []
+categories = []
++++
+```{python}
+list1=[24,48,72,96]
+list2=["day1","day2","day3","day4"]
+```
+
+```{python}
+list1[3]
+list2[1:3]
+list1[::2]
+list1[3]=1000
+list1
+```
+```{python}
+list3=["monkey","giraffe","shark","caterpillar","squid","jellyfish"]
+```
+
+```{python}
+list3[0]
+list3[2:4]
+list3[5]
+list3[1]="cat"
+list3.append("spider")
+print("dog" in list3)
+print("monkey" in list3)
+```
+
+```{R}
+library(reticulate)
+pasta <- c("spaghetti", "fettuccine", "linguine")
+color <- "red"
+```
+
+```{python}
+sauce="tomato","alfredo","pesto"
+drink="wine"
+print(r.pasta,sauce)
+```
+
+```{R}
+cat(c(color,py$drink)) 
+```
+
+![](/post/2021-05-09-kp-longhorn-diary-2_files/wine.JPG)
