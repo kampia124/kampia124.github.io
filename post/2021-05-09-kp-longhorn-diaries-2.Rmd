@@ -1,10 +1,13 @@
-+++
-title = ""
-description = ""
-tags = []
-categories = []
-+++
-#KP
+---
+title: KP Longhorn Diaries 2
+author: ''
+date: '2021-05-09'
+slug: kp-longhorn-diaries-2
+categories: []
+tags: []
+description: ''
+---
+#The Longhorn Diaries Entry 2
 ```{python}
 list1=[24,48,72,96]
 list2=["day1","day2","day3","day4"]
@@ -46,5 +49,4 @@ print(r.pasta,sauce)
 ```{R}
 cat(c(color,py$drink)) 
 ```
-
-![](/post/2021-05-09-kp-longhorn-diary-2_files/wine.JPG)
+![](/img/wine.JPG)

@@ -5,7 +5,30 @@
     <link>/</link>
     <description>Recent content on Kamille Piacquadio</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-US</language><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-US</language>
+    <lastBuildDate>Sun, 09 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>KP Longhorn Diaries</title>
+      <link>/post/2021/05/09/kp-longhorn-diaries/</link>
+      <pubDate>Sun, 09 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2021/05/09/kp-longhorn-diaries/</guid>
+      <description>#The Longhorn Diaries Entry 1 ##“A place where I feel safe about discussing my consumption of alcohol both to celebrate my successes and cope with the challenges of being a growing scientist. It’s a hard knock life for us.”
+Link to project 1
+Link to google
+a &amp;lt;- &amp;quot;Absolut&amp;quot; b &amp;lt;- &amp;quot;Baileys&amp;quot; c &amp;lt;- &amp;quot;Chambord&amp;quot; a ## [1] &amp;quot;Absolut&amp;quot; b ## [1] &amp;quot;Baileys&amp;quot; c ## [1] &amp;quot;Chambord&amp;quot; print(&amp;quot;You are doing great, and vodka sodas make it all better!</description>
+    </item>
+    
+    <item>
+      <title>KP Longhorn Diaries 2</title>
+      <link>/post/2021/05/09/kp-longhorn-diaries-2/</link>
+      <pubDate>Sun, 09 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2021/05/09/kp-longhorn-diaries-2/</guid>
+      <description> #The Longhorn Diaries Entry 2
+list1=[24,48,72,96] list2=[&amp;quot;day1&amp;quot;,&amp;quot;day2&amp;quot;,&amp;quot;day3&amp;quot;,&amp;quot;day4&amp;quot;] list1[3] ## 96 list2[1:3] ## [&amp;#39;day2&amp;#39;, &amp;#39;day3&amp;#39;] list1[::2] ## [24, 72] list1[3]=1000 list1 ## [24, 48, 72, 1000] list3=[&amp;quot;monkey&amp;quot;,&amp;quot;giraffe&amp;quot;,&amp;quot;shark&amp;quot;,&amp;quot;caterpillar&amp;quot;,&amp;quot;squid&amp;quot;,&amp;quot;jellyfish&amp;quot;] list3[0] ## &amp;#39;monkey&amp;#39; list3[2:4] ## [&amp;#39;shark&amp;#39;, &amp;#39;caterpillar&amp;#39;] list3[5] ## &amp;#39;jellyfish&amp;#39; list3[1]=&amp;quot;cat&amp;quot; list3.append(&amp;quot;spider&amp;quot;) print(&amp;quot;dog&amp;quot; in list3) ## False print(&amp;quot;monkey&amp;quot; in list3) ## True library(reticulate) pasta &amp;lt;- c(&amp;quot;spaghetti&amp;quot;, &amp;quot;fettuccine&amp;quot;, &amp;quot;linguine&amp;quot;) color &amp;lt;- &amp;quot;red&amp;quot; sauce=&amp;quot;tomato&amp;quot;,&amp;quot;alfredo&amp;quot;,&amp;quot;pesto&amp;quot; drink=&amp;quot;wine&amp;quot; print(r.pasta,sauce) ## [&amp;#39;spaghetti&amp;#39;, &amp;#39;fettuccine&amp;#39;, &amp;#39;linguine&amp;#39;] (&amp;#39;tomato&amp;#39;, &amp;#39;alfredo&amp;#39;, &amp;#39;pesto&amp;#39;) cat(c(color,py$drink))  ## red wine </description>
+    </item>
+    
     <item>
       <title>Project 1: Exploratory Data Analysis</title>
       <link>/project/project1/</link>

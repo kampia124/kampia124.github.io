@@ -1,11 +1,11 @@
 +++
-title = ""
+title = "KP LONGHORN DIARIES 1"
 description = ""
 tags = []
 categories = []
 +++
 #The Longhorn Diaries
-##"A place where I feel safe about discussing my consumption of alcohol both to celebrate my successes and cope with the challenges of being a growing scientist. It's a hard knock life for us."
+##"A place where I feel safe about discussing my consumption of alcohol both to celebrate my successes and cope with the challenges of being a growing scientist. It's a hard knock life for us."KP
 
 [Link to project 1](/project/project1/)
 
